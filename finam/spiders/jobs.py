@@ -34,9 +34,11 @@ class JobsSpider(Spider):
         self.end_date = end_date
         self.lg = logging.getLogger()
 
-        with io.open('./filteredInstruments.json', 'r', encoding="utf-8") as em_file:
+        with io.open('./filteredInstruments.json', 'r', encoding="utf") as em_file:
             data = em_file.read()
             self.instruments = json.loads(data)
+        # for stocks only
+        self.instruments = [x for x in self.instruments if (x['market'] == 1)]
 
     handle_httpstatus_list = [403]
     name = 'jobs'
@@ -89,12 +91,12 @@ class JobsSpider(Spider):
                 ('mt', mt - 1),
                 ('yt', yt),
                 ('to', end_date.isoformat().replace('-', '.')),
-                ('p', '2'), # p — период котировок (тики, 1 мин., 5 мин., 10 мин., 15 мин., 30 мин., 1 час, 1 день, 1 неделя, 1 месяц)
+                ('p', '6'), # p — период котировок (тики, 1 мин., 5 мин., 10 мин., 15 мин., 30 мин., 1 час, 1 день, 1 неделя, 1 месяц)
                 ('f', instrument['code'] + '_' + start_date.isoformat()),
                 ('e', '.csv'), # e – расширение получаемого файла; возможны варианты — .txt либо .csv
                 ('cn', instrument['code']),
-                ('dtf', '1'), # dtf — формат даты (1 — ггггммдд, 2 — ггммдд, 3 — ддммгг, 4 — дд/мм/гг, 5 — мм/дд/гг)
-                ('tmf', '1'), # tmf — формат времени (1 — ччммсс, 2 — ччмм, 3 — чч: мм: сс, 4 — чч: мм)
+                ('dtf', '4'), # dtf — формат даты (1 — ггггммдд, 2 — ггммдд, 3 — ддммгг, 4 — дд/мм/гг, 5 — мм/дд/гг)
+                ('tmf', '3'), # tmf — формат времени (1 — ччммсс, 2 — ччмм, 3 — чч: мм: сс, 4 — чч: мм)
                 ('MSOR', '0'), # MSOR — выдавать время (0 — начала свечи, 1 — окончания свечи)
                 ('mstime', 'on'),
                 ('mstimever', '1'), # mstimever — выдавать время (НЕ московское — mstimever=0; московское — mstime='on', mstimever='1')
@@ -116,7 +118,9 @@ class JobsSpider(Spider):
                                 'name': instrument['name'],
                                 'decp': instrument.get('decp', None),
                                 'child': instrument['child'],
-                                'id': instrument['id'], })
+                                'id': instrument['id'], },
+                          encoding='utf-8'
+                          )
 
     def parse(self, response):
         self.counter = self.counter + 1
@@ -131,7 +135,7 @@ class JobsSpider(Spider):
                          str(response.status))
             return
         try:
-            reader = csv.reader(response.body.decode("utf-8").split('\r\n'), delimiter=',')
+            reader = csv.reader(response.body.decode("cp1251").split('\r\n'), delimiter=',')
             for row in reader:
                 if len(row) == 9 and row[0] != '<TICKER>':
                     yield{'market': response.meta['market'],

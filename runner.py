@@ -10,11 +10,11 @@ try:
             'crawl',
             'jobs',
             '-a',
-            'start_date=2019/01/01',
+            'start_date=2021/01/01',
             '-a',
-            'end_date=2019/04/01',
+            'end_date=2021/12/31',
             '-o',
-            '2019_01-04.csv',
+            'moex_30min_2021_01-12.csv',
             '-t',
             'csv'
         ]
