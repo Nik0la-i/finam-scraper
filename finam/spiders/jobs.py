@@ -34,11 +34,13 @@ class JobsSpider(Spider):
         self.end_date = end_date
         self.lg = logging.getLogger()
 
-        with io.open('./filteredInstruments.json', 'r', encoding="utf") as em_file:
+        with io.open('./instruments2.json', 'r', encoding="utf") as em_file:
             data = em_file.read()
             self.instruments = json.loads(data)
         # for stocks only
-        self.instruments = [x for x in self.instruments if (x['market'] == 1)]
+        # self.instruments = [x for x in self.instruments if (x['market'] == 1)]
+	# for spb stocks 
+        self.instruments = [x for x in self.instruments if (x['market'] == 517)]
 
     handle_httpstatus_list = [403]
     name = 'jobs'
@@ -145,7 +147,7 @@ class JobsSpider(Spider):
                           'child': response.meta['child'],
                           'id': response.meta['id'],
                           'per': row[1],
-                          'datetime': row[2] + row[3],
+                          'datetime': row[2] +' ' + row[3],
                           'open': row[4],
                           'high': row[5],
                           'low': row[6],
