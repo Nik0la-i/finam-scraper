@@ -12,9 +12,9 @@ try:
             '-a',
             'start_date=2019/01/01',
             '-a',
-            'end_date=2022/12/31',
+            'end_date=2023/04/29',
             '-o',
-            'spb_30min_2019_2022.csv',
+            'world_ind_D_2019_202304.csv',
             '-t',
             'csv'
         ]

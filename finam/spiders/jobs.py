@@ -40,7 +40,7 @@ class JobsSpider(Spider):
         # for stocks only
         # self.instruments = [x for x in self.instruments if (x['market'] == 1)]
 	# for spb stocks 
-        self.instruments = [x for x in self.instruments if (x['market'] == 517)]
+        self.instruments = [x for x in self.instruments if (x['market'] == 6)]
 
     handle_httpstatus_list = [403]
     name = 'jobs'
@@ -93,7 +93,7 @@ class JobsSpider(Spider):
                 ('mt', mt - 1),
                 ('yt', yt),
                 ('to', end_date.isoformat().replace('-', '.')),
-                ('p', '6'), # p — период котировок (тики, 1 мин., 5 мин., 10 мин., 15 мин., 30 мин., 1 час, 1 день, 1 неделя, 1 месяц)
+                ('p', '8'), # p — период котировок (тики, 1 мин., 5 мин., 10 мин., 15 мин., 30 мин., 1 час, 1 день, 1 неделя, 1 месяц)
                 ('f', instrument['code'] + '_' + start_date.isoformat()),
                 ('e', '.csv'), # e – расширение получаемого файла; возможны варианты — .txt либо .csv
                 ('cn', instrument['code']),
