@@ -8,6 +8,8 @@ import urllib.parse
 import logging
 import sys
 import io
+from pathlib import Path
+sys.path.append(r'C:\Users\nkoud\Python\finam-scraper')
 
 # create logger with 'spam_application'
 logger = logging.getLogger('spider')
@@ -19,7 +21,7 @@ logger.addHandler(fh)
 
 
 class JobsSpider(Spider):
-    def __init__(self, start_date, end_date, *args, **kwargs):
+    def __init__(self, start_date, end_date, config, *args, **kwargs):
         super(JobsSpider, self).__init__(*args, **kwargs)
 
         # extract date part of url
@@ -34,13 +36,18 @@ class JobsSpider(Spider):
         self.end_date = end_date
         self.lg = logging.getLogger()
 
-        with io.open('./instruments2.json', 'r', encoding="utf") as em_file:
+        with open(Path(config), 'r') as f:
+            self.config = json.load(f)
+        # print(f)
+
+        # with io.open('./instruments2.json', 'r', encoding="utf") as em_file:
+        with io.open(self.config["instruments"], 'r', encoding="utf") as em_file:
             data = em_file.read()
             self.instruments = json.loads(data)
         # for stocks only
-        # self.instruments = [x for x in self.instruments if (x['market'] == 1)]
-	# for spb stocks 
-        self.instruments = [x for x in self.instruments if (x['market'] == 6)]
+        # self.instruments = [x for x in self.instruments if (x['market'] == 6)]
+	    # for spb stocks 6
+        self.instruments = [x for x in self.instruments if (x['market'] == self.config["market"])]
 
     handle_httpstatus_list = [403]
     name = 'jobs'
@@ -93,7 +100,7 @@ class JobsSpider(Spider):
                 ('mt', mt - 1),
                 ('yt', yt),
                 ('to', end_date.isoformat().replace('-', '.')),
-                ('p', '8'), # p — период котировок (тики, 1 мин., 5 мин., 10 мин., 15 мин., 30 мин., 1 час, 1 день, 1 неделя, 1 месяц)
+                ('p', self.config["period"]), # p — период котировок (тики, 1 мин., 5 мин., 10 мин., 15 мин., 30 мин., 1 час, 1 день, 1 неделя, 1 месяц)
                 ('f', instrument['code'] + '_' + start_date.isoformat()),
                 ('e', '.csv'), # e – расширение получаемого файла; возможны варианты — .txt либо .csv
                 ('cn', instrument['code']),
