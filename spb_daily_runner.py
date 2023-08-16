@@ -13,10 +13,11 @@ try:
             'crawl',
             'jobs',
             '-a',
-            'start_date=2023/07/24',
+            'start_date=2019/01/01',
             '-a',
             'end_date=2023/07/26',
             '-a',
+            
             'config=spb_daily.json',
             '-o',
             tmp + ':csv'
@@ -25,7 +26,8 @@ try:
 except SystemExit:
     pass
 
-src = Path(r'C:\data\finam\src_spb_daily.csv')
+#src = Path(r'C:\data\finam\src_spb_daily.csv')
+src = Path(r'/home/nikolai/Yandex.Disk/data/finam/src_spb_daily.csv')
 merger.merge(src=src, tmp=Path(tmp))
 
 
