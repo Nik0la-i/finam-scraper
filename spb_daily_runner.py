@@ -26,10 +26,10 @@ try:
 except SystemExit:
     pass
 
-#src = Path(r'C:\data\finam\src_spb_daily.csv')
-src = Path(r'/home/nikolai/Yandex.Disk/data/finam/src_spb_daily.csv')
+# src = Path(r'C:\data\finam\src_spb_daily.csv')
+# src = Path(r'/home/nikolai/Yandex.Disk/data/finam/src_spb_daily.csv')
+src = Path(r'C:\Users\nkoud\YandexDisk\data\finam\src_spb_daily.csv')
 merger.merge(src=src, tmp=Path(tmp))
-
 
 
 # scrapy crawl jobs -a start_date="2019/01/01" -a end_date="2019/04/01" -o "2019_01-04.csv" -t csv

@@ -9,7 +9,7 @@ import logging
 import sys
 import io
 from pathlib import Path
-sys.path.append(r'C:\Users\nkoud\Python\finam-scraper')
+#sys.path.append(r'C:\Users\nkoud\Python\finam-scraper')
 
 # create logger with 'spam_application'
 logger = logging.getLogger('spider')
